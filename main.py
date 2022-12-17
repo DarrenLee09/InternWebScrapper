@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import pyodbc
 
 # URL to scrape from
 URL = "https://realpython.github.io/fake-jobs/" 
@@ -50,3 +51,23 @@ for job_element in python_job_elements:
     for link in links:
         link_url = link["href"] # accesses the href attribute of the link (HOW TO ACCESS ATTRIBUTES OF TAGS)
         print(f"Apply here: {link_url}\n")
+
+
+#SQL Stuff Templates
+# Replace with your own database connection string
+connection_string = "DRIVER={SQL Server};SERVER=<server-name>;DATABASE=<database-name>;UID=<username>;PWD=<password>"
+
+# Connect to the database using the connection string
+conn = pyodbc.connect(connection_string)
+
+# Create a cursor object to execute SQL queries
+cursor = conn.cursor()
+
+# Use the cursor to execute a SQL query to create a table
+cursor.execute("CREATE TABLE jobs (title VARCHAR(255), company VARCHAR(255), location VARCHAR(255))")
+
+# Use the cursor to execute a SQL query to insert data into the table
+cursor.execute("INSERT INTO jobs (title, company, location) VALUES (?, ?, ?)", (title, company, location))
+
+# Use the cursor to execute a SQL query to commit the data to the database
+cursor.commit()
